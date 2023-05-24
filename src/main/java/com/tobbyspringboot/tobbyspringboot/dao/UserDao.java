@@ -6,14 +6,19 @@ import java.sql.*;
 
 public class UserDao {
 		// Connection db method
-		SimpleConnectionMaker connectionMaker = new SimpleConnectionMaker();
+		ConnectionMaker connectionMaker;
+
+		public UserDao() {
+				this.connectionMaker = new DConnectionMaker();
+		}
 
 		// Connection user data add method
 		public void add(User user) throws ClassNotFoundException, SQLException {
 				
 				// DB 연결
-				Connection conn = connectionMaker.makeNewConnection();
-				
+				Connection conn = connectionMaker.makeConnection();
+
+
 				PreparedStatement pstmt = conn.prepareStatement("insert into user(id, name, password) values(?, ?, ?)");
 				pstmt.setString(1, user.getId());
 				pstmt.setString(2, user.getName());
@@ -29,7 +34,7 @@ public class UserDao {
 		public User get(String id) throws ClassNotFoundException, SQLException {
 
 				// DB 연결
-				Connection conn = connectionMaker.makeNewConnection();
+				Connection conn = connectionMaker.makeConnection();
 
 				// db 와 연결하여 table 의 data 들을 불러오는 query 문을 작성
 				PreparedStatement pst = conn.prepareStatement("select id, name, password from user where id = ?");
