@@ -8,8 +8,9 @@ public class UserDao {
 		// Connection db method
 		ConnectionMaker connectionMaker;
 
-		public UserDao() {
-				this.connectionMaker = new DConnectionMaker();
+		// UserDao 생성자 => ConnectionMaker 참조 타입 connectionMaker 참조변수
+		public UserDao(ConnectionMaker connectionMaker) {
+				this.connectionMaker = connectionMaker;
 		}
 
 		// Connection user data add method
@@ -18,15 +19,20 @@ public class UserDao {
 				// DB 연결
 				Connection conn = connectionMaker.makeConnection();
 
-
+				// User Data 생성
 				PreparedStatement pstmt = conn.prepareStatement("insert into user(id, name, password) values(?, ?, ?)");
-				pstmt.setString(1, user.getId());
-				pstmt.setString(2, user.getName());
-				pstmt.setString(3, user.getPassword());
 
+				// column values
+				pstmt.setString(1, user.getId()); // id
+				pstmt.setString(2, user.getName()); // name
+				pstmt.setString(3, user.getPassword()); // password
+
+				// set data => db 에 update
 				pstmt.executeUpdate();
 
+				// query 문 종료
 				pstmt.close();
+				// db 연결 종료
 				conn.close();
 		}
 
@@ -61,17 +67,19 @@ public class UserDao {
 		// main method
 		public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-				UserDao userDao = new UserDao();
+				ConnectionMaker cm = new DConnectionMaker();
+
+				UserDao userDao = new UserDao(cm);
 
 				User user = new User();
 
-				user.setId("3");
-				user.setName("test3");
+				user.setId("5");
+				user.setName("test5");
 				user.setPassword("1234");
 
 				userDao.add(user);
 
-				User selectedUser = userDao.get("3");
+				User selectedUser = userDao.get("5");
 
 				System.out.println(selectedUser.getId());
 				System.out.println(selectedUser.getName());

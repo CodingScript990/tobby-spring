@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static java.lang.System.getenv;
 
-public class NUserDao extends UserDao {
+public class NUserDao  {
 //		@Override
 		public Connection getConnection() throws ClassNotFoundException, SQLException {
 
